@@ -1,0 +1,81 @@
+{
+    "ingredients": [
+        {
+            "name": "apple",
+            "image": "apple.jpg",
+            "price": 20.69,
+            "amount": {
+                "metric": {
+                    "value": 1.0,
+                    "unit": "serving"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "serving"
+                }
+            }
+        },
+        {
+            "name": "beef broth",
+            "image": "beef-broth.png",
+            "price": 113.9,
+            "amount": {
+                "metric": {
+                    "value": 480.0,
+                    "unit": "ml"
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": "cups"
+                }
+            }
+        },
+        {
+            "name": "cinnamon sugar",
+            "image": "cinnamon-sugar.png",
+            "price": 41.14,
+            "amount": {
+                "metric": {
+                    "value": 1.0,
+                    "unit": "serving"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "serving"
+                }
+            }
+        },
+        {
+            "name": "green apples",
+            "image": "grannysmith-apple.png",
+            "price": 160.97,
+            "amount": {
+                "metric": {
+                    "value": 2.0,
+                    "unit": ""
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": ""
+                }
+            }
+        },
+        {
+            "name": "pork tenderloin",
+            "image": "pork-tenderloin-raw.png",
+            "price": 104.22,
+            "amount": {
+                "metric": {
+                    "value": 1.0,
+                    "unit": "serving"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "serving"
+                }
+            }
+        }
+    ],
+    "totalCost": 440.93,
+    "totalCostPerServing": 440.93
+}

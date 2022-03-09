@@ -1,0 +1,141 @@
+{
+    "ingredients": [
+        {
+            "name": "spanish dry red wine",
+            "image": "red-wine.jpg",
+            "price": 2.61,
+            "amount": {
+                "metric": {
+                    "value": 2.0,
+                    "unit": "bottles"
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": "bottles"
+                }
+            }
+        },
+        {
+            "name": "brandy",
+            "image": "brandy.png",
+            "price": 740.34,
+            "amount": {
+                "metric": {
+                    "value": 240.0,
+                    "unit": "ml"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "cup"
+                }
+            }
+        },
+        {
+            "name": "sugar",
+            "image": "sugar-in-bowl.png",
+            "price": 13.78,
+            "amount": {
+                "metric": {
+                    "value": 100.0,
+                    "unit": "g"
+                },
+                "us": {
+                    "value": 0.5,
+                    "unit": "cup"
+                }
+            }
+        },
+        {
+            "name": "canned sprite",
+            "image": "soda-can.jpg",
+            "price": 24.3,
+            "amount": {
+                "metric": {
+                    "value": 340.194,
+                    "unit": "g"
+                },
+                "us": {
+                    "value": 12.0,
+                    "unit": "ounces"
+                }
+            }
+        },
+        {
+            "name": "raspberries",
+            "image": "raspberries.jpg",
+            "price": 468.0,
+            "amount": {
+                "metric": {
+                    "value": 1.0,
+                    "unit": "small container"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "small container"
+                }
+            }
+        },
+        {
+            "name": "raspberries",
+            "image": "raspberries.jpg",
+            "price": 1419.53,
+            "amount": {
+                "metric": {
+                    "value": 946.353,
+                    "unit": "g"
+                },
+                "us": {
+                    "value": 1.0,
+                    "unit": "quart"
+                }
+            }
+        },
+        {
+            "name": "green apples",
+            "image": "grannysmith-apple.png",
+            "price": 160.97,
+            "amount": {
+                "metric": {
+                    "value": 2.0,
+                    "unit": ""
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": ""
+                }
+            }
+        },
+        {
+            "name": "oranges",
+            "image": "orange.png",
+            "price": 58.22,
+            "amount": {
+                "metric": {
+                    "value": 2.0,
+                    "unit": ""
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": ""
+                }
+            }
+        },
+        {
+            "name": "limes",
+            "image": "lime.jpg",
+            "price": 50.0,
+            "amount": {
+                "metric": {
+                    "value": 2.0,
+                    "unit": ""
+                },
+                "us": {
+                    "value": 2.0,
+                    "unit": ""
+                }
+            }
+        }
+    ],
+    "totalCost": 2937.75,
+    "totalCostPerServing": 244.81
+}
