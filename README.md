@@ -116,7 +116,7 @@ The project takes on this particular structure for the following reasons:
 
 #### Error Handling
 
-Program-Specific (Potential) Error Cases:
+Program-Specific Error Cases:
 
 - User attempts view recipes without providing at least one (valid) ingredient:
     - *Solution: The program checks each inputted ingredient against the API such that we know which ingredients are 'valid' and which are not. The program may not advance until at least one valid ingredient has been submitted.*
@@ -136,7 +136,7 @@ Program-Specific (Potential) Error Cases:
 - User does not provide valid input into confirmation prompt (y/n):
     - *Solution: Repeat the prompt until a valid input is submitted*
 
-General (Potential) Error Cases:
+General Error Cases:
 
 - No internet connection prior to starting program:
     - *Solution: At the beginning of the program we send a simple GET request we know will return a certain value, otherwise do not execute the program as the API and/or Internet is not serviceable*
@@ -155,7 +155,7 @@ In terms of testability, the project is certainly testable. That said, it can be
 The test suite addresses some of these concerns, and does use real data from the API (recipe, pricing data) to help simulate real scenarios, but at this time it does not cover all the cases that it is able to. That said, it is easy to add more testing cases to the file itself as the file can scale as the project does, or different test files could be created for different packages should another one be added.
 
 #### Usability
-The goal here is to allow the user to have the enough options to navigate the program as necessary while providing useful directions/feedback too. This program provides the basic functions of: adding, removing, and viewing ingredients in the list at any time during the first phase of the program. This also includes providing good feedback to the user as well as information about recipes.
+The goal here is to allow the user to have enough options to navigate the program as necessary while providing useful directions/feedback too. This program provides the basic functions of: adding, removing, and viewing ingredients in the list at any time during the first phase of the program. This also includes providing good feedback to the user as well as information about recipes.
 
 In the second phase of the program, instead of flooding the display with data, the user is prompted to view a basic breakdown of their shopping list which allows them to view the info they may want to see, but without flooding the screen with the same data redundantly between viewing recipes.
 
