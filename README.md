@@ -2,7 +2,7 @@
 @author Justin Noddell
 
 ## Overview:
-- [What is the Tasty, Tasty Recipe Generator Program?](#what-is-the-tasty-tasty-generator-program)
+- [What is the Tasty, Tasty Recipe Generator Program?](#what-is-the-tasty-tasty-recipe-generator-program)
 - [**Installing and Running the Tasty, Tasty Recipe Generator Program**](#installing--running-the-tasty-tasty-generator-program)
     - [Pre-Reqs](#pre-reqs)
     - [Clone the repository](#clone-repository)
@@ -27,7 +27,7 @@
         - [Technical Documentation](#technical-documentation)
         - [Code Comments](#code-comments)
 
-### What is the Tasty, Tasty Generator Program?
+### What is the Tasty, Tasty Recipe Generator Program?
 
 This program takes user inputted ingredients (such as ones that you might find in your kitchen), and quickly generates a near-endless supply of recipes to show to you. Users can "like" recipes, and the appropriate ingredients will be added to your shopping list. When you are satisfied with your shopping list, you will receive a detailed breakdown of ingredients, sorted by aisle, and with estimated pricing.
 
