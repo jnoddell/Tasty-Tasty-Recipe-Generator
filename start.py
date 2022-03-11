@@ -77,9 +77,17 @@ else:
                     shopping_list.print_detailed()
                     CLI.pause()
                     break
+        
+        # case: recipes exhausted, print shopping list
+        elif ingredient_list.recipes_exhausted():
+
+            shopping_list.print_detailed()
+            CLI.pause()
+            break
 
         # case: API requests limit reached for current execution
         else:
 
+            CLI.api_error()
             CLI.pause()
             break
