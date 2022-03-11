@@ -14,9 +14,15 @@ warning_id = "*** WARNING *** "     # warning message
 # purpose:      greet the user with a message
 def greet_user() -> None:
 
-    print("\n\n*************************")
-    print("******** WELCOME ********")
-    print("*************************\n")
+    greeting = " WELCOME  "
+    border = "*" * 100
+    partial = "*" * ((100 - len(greeting)) // 2)
+    print(border)
+    print("For an optimized experience, adjust the widow such that the above fits on one line.")
+
+    print("\n\n" + border)
+    print(partial + greeting + partial)
+    print(border + "\n")
 
 # api_error
 # params        None
@@ -29,6 +35,14 @@ def api_error() -> None:
     print(info_msg_id, "There is no internet connection / Spoonacular is unavailable.")
     print("\nPlease fix the issue(s) before attempting to run the program again.")
 
+# recipes_exhausted
+# params        None
+# returns:      None
+# purpose:      alert user a fatal error has occured
+def recipes_exhausted() -> None:
+
+    print(info_msg_id, "Recipes have been exhausted...\n")
+
 # confirm
 # params:       msg: str -> the message to be displayed
 # returns:      True/False
@@ -37,12 +51,13 @@ def confirm(msg: str) -> bool:
 
     while True:
 
-        confirm_text = input("\n" + msg + " (Y/N):\n" + user_input_id).lower()
+        response = input("\n" + msg + " (Y/N):\n" + user_input_id)
+        response = str(response).lower()
         print()
 
-        if confirm_text == "y" or confirm_text == "yes":
+        if response == "y" or response == "yes":
             return True
-        elif confirm_text == "n" or confirm_text == "no":
+        elif response == "n" or response == "no":
             return False
         else:
             print("\nInvalid input, please re-enter.\n")

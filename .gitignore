@@ -1,14 +1,14 @@
-.venv
 .DS_Store
+.venv
 Build
 dist
+setup.py
 src/.DS_STORE
 src/tastypackage/.DS_STORE
 src/tastypackage/__pycache__
-src/tastypackage/main.py
 Tasty_Tasty_Recipe_Generator.egg-info
-tests/__pycache__
 tests/.DS_STORE
+tests/__pycache__
 tests/src/.DS_STORE
 tests/src/tastypackage/.DS_STORE
 tests/src/tastypackage/__pycache__

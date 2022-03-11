@@ -1,7 +1,7 @@
 # README
 @author Justin Noddell
 
-## Overview:
+## Overview
 - [What is the Tasty, Tasty Recipe Generator Program?](#what-is-the-tasty-tasty-recipe-generator-program)
 - [**Installing and Running the Tasty, Tasty Recipe Generator Program**](#installing--running-the-tasty-tasty-generator-program)
     - [Pre-Reqs](#pre-reqs)
@@ -47,9 +47,8 @@ Confirm the following conditions are met before proceeding:
 #### Set a Temporary Environment Variable
 1. Navigate to the root directory of the project
 2. Create a temporary, virtual environment variable called ```API_KEY``` using the command ```export API_KEY=db11657e774b4e318ab0c9c58c93aa24```
-    - NOTE: this is an API Key for Spoonacular (Free-tier), it may reach the api request daily limit
-    - [Optional] Get an API Key for free by creating a Spoonacular Account
-    - **This key will be made inactive soon**
+    - **This key has been made inactive**
+    - [Recommended] Get an API Key for free by creating a [Spoonacular Account](https://spoonacular.com/food-api)
 3. confirm the variable is set by running ```echo $API_KEY```
 
 #### [Optional] [Recommended] Create and Activate a Virtual Environment
@@ -140,8 +139,8 @@ General Error Cases:
 
 - No internet connection prior to starting program:
     - *Solution: At the beginning of the program we send a simple GET request we know will return a certain value, otherwise do not execute the program as the API and/or Internet is not serviceable*
-    - 
-- Lost of internet connection during execution:
+
+- Loss of internet connection during execution:
     - *Solution: At each API request, check for failed responses and promptly terminate the program if a failure has been detected.*
 
 - User Spamming Inputs:

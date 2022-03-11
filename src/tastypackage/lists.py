@@ -24,7 +24,9 @@ class IngredientList:
     #                   * __size:           the length of __list
     #                   * __stack:          a queue of recipes to display to the user
     #                   * __seen:           a list of recipe IDs the user has been shown
-    #                   * __stack_multiplier:   the number of times the recipe stack has had to be filled
+    #                   * __stack_multiplier:   the number of times the recipe stack has had to be filled 
+    #                   * __multiplier_limit:   the number of times the stack multiplier may be upped
+
     def __init__(self):
 
         self.__list = list()
@@ -32,8 +34,9 @@ class IngredientList:
         self.__set = set()
         self.__size = 0
         self.__stack = list()
-        self.__seen = list()
-        self.__stack_multiplier = float(1.0)
+        self.__seen = set()
+        self.__stack_multiplier = 1
+        self.__multiplier_limit = 32
     
     # __add_ingredient
     # params:       new_ingredient: str -> the new user-generated ingredient
@@ -175,14 +178,14 @@ class IngredientList:
 
         return url
 
-    # generate_recipes
+    # ___generate_recipes
     # params:       None
     # returns:      None
     # purpose:      create a stack of recipes to display to user, avoid recipes already displayed
-    def generate_recipes(self) -> None:
+    def ___generate_recipes(self) -> None:
 
         # cap num of recipes retrived to minimize API calls
-        MAX_NUM_RECIPES = int(100 * self.__stack_multiplier)
+        MAX_NUM_RECIPES = int(20 * self.__stack_multiplier)
         new_recipes = self.find_recipe(self.__list, MAX_NUM_RECIPES)
 
         if new_recipes:
@@ -211,12 +214,19 @@ class IngredientList:
         # case: there are no valid ingredients in ingredient list
         if not self.has_valid():
 
-            return []
-            
-        # case: queue needs to generate more recipes
-        elif not self.__stack and self.__stack_multiplier <= 32:
+            return []   # CLI feedback comes from main
+        
+        # case: there are no recipes that can be found, search has reached its limit
+        elif not self.__stack and self.__stack_multiplier > self.__multiplier_limit:
 
-            self.generate_recipes()
+            CLI.recipes_exhausted()
+            return []
+
+        # case: queue needs to generate more recipes
+        elif not self.__stack:
+
+            print(CLI.info_msg_id, "Generating recipes...\n")
+            self.___generate_recipes()
             self.__stack_multiplier *= 2
             return self.get_recipe(ingredient)
 
@@ -224,7 +234,7 @@ class IngredientList:
         index = randrange(len(self.__stack))
         recipe = self.__stack[index]
 
-        self.__seen.append(recipe["id"])
+        self.__seen.add(recipe["id"])
         del self.__stack[index]
         
         return recipe
@@ -287,6 +297,14 @@ class IngredientList:
     def get_ingredients(self) -> list:
 
         return self.__list
+
+    # recipes_exhausted
+    # params:       None
+    # returns:      True/False
+    # purpose:      is the recipe generation limit exhausted
+    def recipes_exhausted(self) -> list:
+
+        return self.__stack_multiplier > self.__multiplier_limit and not self.__stack
     
     # print_ingredients
     # params:       None
@@ -515,16 +533,16 @@ class ShoppingList():
             if i < N - 1:
                 m_ingredients += ", "
 
-        print("Recipe:\n")
+        print("Proposed Recipe:\n")
         print(recipe["title"])
         char_count = sum(len(ing) for ing in u_ingredients)
-        end_symbol = "" if char_count < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Uses:", u_ingredients, end_symbol))
+        end_symbol = "" if char_count < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Uses:", u_ingredients, end_symbol))
         char_count = sum(len(ing) for ing in m_ingredients)
-        end_symbol = "" if char_count < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Missing Ingredients:", m_ingredients, end_symbol))
-        end_symbol = "" if len(recipe["image"]) < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Image Link:", recipe["image"], end_symbol))
+        end_symbol = "" if char_count < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Missing Ingredients:", m_ingredients, end_symbol))
+        end_symbol = "" if len(recipe["image"]) < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Image Link:", recipe["image"], end_symbol))
 
     #print_basic
     # params:       None
@@ -537,7 +555,7 @@ class ShoppingList():
 
             print("Shopping List Ingredients:\n")
             for ingredient in sorted(self.__shopping_list, key=lambda item: item):
-                print("{:3} {:72.72s}".format(CLI.list_id, ingredient))
+                print("{:3} {:96.96s}".format(CLI.list_id, ingredient))
         
         # case: there does not exist a shopping list
         else:
@@ -553,21 +571,22 @@ class ShoppingList():
         # case: there exists a shopping list
         if self.__shopping_list:
 
-            top_border = "*" * 77
-            partial_border = "*" * 31
+            top_border = "*" * 100
+            title = " SHOPPING LIST  "
+            partial_border = "*" * ((100 - len(title)) // 2)
             print(top_border)
-            print(partial_border, "Shopping List", partial_border)
+            print(partial_border + title + partial_border)
             print(top_border + "\n")
 
-            print("{:30s} {:30s} {:15s}\n".format("Item", "Aisle", "Est. Price"))
+            print("{:40s} {:40s} {:18s}\n".format("Item", "Aisle", "Est. Price"))
 
             for ingredient, data in sorted(self.__shopping_list.items(), key=lambda item: item[1]):
 
                 aisle = data[0]
                 price = data[1]
-                print("{:30.30s} {:30.30s} {:15.2f}".format(ingredient, aisle, price))
+                print("{:40.40s} {:40.40s} {:18.2f}".format(ingredient, aisle, price))
             
-            print("\n{:45s} {:15s} {:15.2f}".format("", "Est. Total", self.__total))
+            print("\n{:65s} {:15s} {:18.2f}".format("", "Est. Total", self.__total))
         
         # case: there does not exist a shopping list
         else:
