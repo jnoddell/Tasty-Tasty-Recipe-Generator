@@ -23,7 +23,7 @@ class IngredientList:
     #                   * __set:            a hash set of __list providing O(1) time lookups of ingredients
     #                   * __size:           the length of __list
     #                   * __stack:          a queue of recipes to display to the user
-    #                   * __seen:           a list of recipe IDs the user has been shown
+    #                   * __seen:           a hash set of seen recipe giving O(1) lookups
     #                   * __stack_multiplier:   the number of times the recipe stack has had to be filled 
     #                   * __multiplier_limit:   the number of times the stack multiplier may be upped
 
@@ -109,7 +109,7 @@ class IngredientList:
     # purpose:      to determine if the ingredient exists in any recipes within the API
     def exists(self, ingredient: str) -> bool:
 
-        return True if self.find_recipe( ingredient, 1 ) else False
+        return True if self.__find_recipes( ingredient, 1 ) else False
     
     # create
     # params:       None
@@ -124,10 +124,11 @@ class IngredientList:
             user_input = str(user_input).lower()
             print()
 
-            if user_input == "done":
+            if user_input == "done" and self.is_empty():
                 # bypass an empty list, that check comes from main
-                if self.is_empty():
-                    return
+                return
+
+            elif user_input == "done":
 
                 self.print_ingredients()
                 if CLI.confirm("Are you done entering ingredients?"):
@@ -158,7 +159,7 @@ class IngredientList:
     #               params: list -> parameters of get request
     # returns:      str -> adjusted url with params and api token
     # purpose:      create GET request url including api key and params for Search-Recipes-By-Ingredients
-    def __format_get_recipe_by_ingredients(self, endpoint, params = list()) -> str:
+    def __format_get_recipe_by_ingredients(self, endpoint: str, params: list = list()) -> str:
         
         # ref. https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients
         url = endpoint
@@ -186,7 +187,7 @@ class IngredientList:
 
         # cap num of recipes retrived to minimize API calls
         MAX_NUM_RECIPES = int(20 * self.__stack_multiplier)
-        new_recipes = self.find_recipe(self.__list, MAX_NUM_RECIPES)
+        new_recipes = self.__find_recipes(self.__list, MAX_NUM_RECIPES)
 
         if new_recipes:
             self.__stack += new_recipes
@@ -239,12 +240,12 @@ class IngredientList:
         
         return recipe
     
-    # find_recipe
+    # __find_recipes
     # params:       ingredient: list -> an ingredient to use   
     #               num_recipes: int -> max number of recipes to return
     # returns:      list -> an array of ingredients to use
     # purpose:      attempt to create a list of at least one recipe from the given ingredients list
-    def find_recipe(self, ingredients: list = list(), num_recipes: int = 1) -> list:
+    def __find_recipes(self, ingredients: list = list(), num_recipes: int = 1) -> list:
 
         # prepare for possibility of no/loss of internet connection 
         try:
@@ -361,13 +362,11 @@ class ShoppingList():
     # purpose:      to construct the object and its class variables:
     #                   * __shopping_list: a ditionary of missing ingredients [key] for recipes and their respective IDs, aisles, and prices [values]
     #                   * __blacklist: a list of ingredients to exclude from the shopping list
-    #                   * __products: a list of recipe IDs to help determine pricing
     #                   * __total: the total cost of the shopping list
     def __init__(self, blacklist: list = list()):
 
         self.__shopping_list = dict()
         self.__blacklist = set(blacklist)
-        self.__products = list()
         self.__total = 0
 
     # __add_ingredient
@@ -413,7 +412,6 @@ class ShoppingList():
         if not recipe:
             return False
             
-        self.__products.append(recipe["id"])
         for ingredient in recipe["missedIngredients"]:
 
             self.__add_ingredient(ingredient)

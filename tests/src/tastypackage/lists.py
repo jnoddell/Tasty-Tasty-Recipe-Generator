@@ -23,7 +23,7 @@ class IngredientList:
     #                   * __set:            a hash set of __list providing O(1) time lookups of ingredients
     #                   * __size:           the length of __list
     #                   * __stack:          a queue of recipes to display to the user
-    #                   * __seen:           a list of recipe IDs the user has been shown
+    #                   * __seen:           a hash set of seen recipe giving O(1) lookups
     #                   * __stack_multiplier:   the number of times the recipe stack has had to be filled 
     #                   * __multiplier_limit:   the number of times the stack multiplier may be upped
 
@@ -109,7 +109,7 @@ class IngredientList:
     # purpose:      to determine if the ingredient exists in any recipes within the API
     def exists(self, ingredient: str) -> bool:
 
-        return True if self.find_recipe( ingredient, 1 ) else False
+        return True if self.__find_recipes( ingredient, 1 ) else False
     
     # create
     # params:       None
@@ -124,10 +124,11 @@ class IngredientList:
             user_input = str(user_input).lower()
             print()
 
-            if user_input == "done":
+            if user_input == "done" and self.is_empty():
                 # bypass an empty list, that check comes from main
-                if self.is_empty():
-                    return
+                return
+
+            elif user_input == "done":
 
                 self.print_ingredients()
                 if CLI.confirm("Are you done entering ingredients?"):
@@ -158,7 +159,7 @@ class IngredientList:
     #               params: list -> parameters of get request
     # returns:      str -> adjusted url with params and api token
     # purpose:      create GET request url including api key and params for Search-Recipes-By-Ingredients
-    def __format_get_recipe_by_ingredients(self, endpoint, params = list()) -> str:
+    def __format_get_recipe_by_ingredients(self, endpoint: str, params: list = list()) -> str:
         
         # ref. https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients
         url = endpoint
@@ -186,7 +187,7 @@ class IngredientList:
 
         # cap num of recipes retrived to minimize API calls
         MAX_NUM_RECIPES = int(20 * self.__stack_multiplier)
-        new_recipes = self.find_recipe(self.__list, MAX_NUM_RECIPES)
+        new_recipes = self.__find_recipes(self.__list, MAX_NUM_RECIPES)
 
         if new_recipes:
             self.__stack += new_recipes
@@ -239,12 +240,12 @@ class IngredientList:
         
         return recipe
     
-    # find_recipe
+    # __find_recipes
     # params:       ingredient: list -> an ingredient to use   
     #               num_recipes: int -> max number of recipes to return
     # returns:      list -> an array of ingredients to use
     # purpose:      attempt to create a list of at least one recipe from the given ingredients list
-    def find_recipe(self, ingredients: list = list(), num_recipes: int = 1) -> list:
+    def __find_recipes(self, ingredients: list = list(), num_recipes: int = 1) -> list:
 
         # prepare for possibility of no/loss of internet connection 
         try:
@@ -361,13 +362,11 @@ class ShoppingList():
     # purpose:      to construct the object and its class variables:
     #                   * __shopping_list: a ditionary of missing ingredients [key] for recipes and their respective IDs, aisles, and prices [values]
     #                   * __blacklist: a list of ingredients to exclude from the shopping list
-    #                   * __products: a list of recipe IDs to help determine pricing
     #                   * __total: the total cost of the shopping list
     def __init__(self, blacklist: list = list()):
 
         self.__shopping_list = dict()
         self.__blacklist = set(blacklist)
-        self.__products = list()
         self.__total = 0
 
     # __add_ingredient
@@ -413,7 +412,6 @@ class ShoppingList():
         if not recipe:
             return False
             
-        self.__products.append(recipe["id"])
         for ingredient in recipe["missedIngredients"]:
 
             self.__add_ingredient(ingredient)
@@ -533,16 +531,16 @@ class ShoppingList():
             if i < N - 1:
                 m_ingredients += ", "
 
-        print("Recipe:\n")
+        print("Proposed Recipe:\n")
         print(recipe["title"])
         char_count = sum(len(ing) for ing in u_ingredients)
-        end_symbol = "" if char_count < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Uses:", u_ingredients, end_symbol))
+        end_symbol = "" if char_count < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Uses:", u_ingredients, end_symbol))
         char_count = sum(len(ing) for ing in m_ingredients)
-        end_symbol = "" if char_count < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Missing Ingredients:", m_ingredients, end_symbol))
-        end_symbol = "" if len(recipe["image"]) < 75 else "..."
-        print("{:25.25} {:75.75} {:3}".format(CLI.list_id + "Image Link:", recipe["image"], end_symbol))
+        end_symbol = "" if char_count < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Missing Ingredients:", m_ingredients, end_symbol))
+        end_symbol = "" if len(recipe["image"]) < 71 else "..."
+        print("{:25.25} {:71.71}{:3}".format(CLI.list_id + "Image Link:", recipe["image"], end_symbol))
 
     #print_basic
     # params:       None
@@ -555,7 +553,7 @@ class ShoppingList():
 
             print("Shopping List Ingredients:\n")
             for ingredient in sorted(self.__shopping_list, key=lambda item: item):
-                print("{:3} {:72.72s}".format(CLI.list_id, ingredient))
+                print("{:3} {:96.96s}".format(CLI.list_id, ingredient))
         
         # case: there does not exist a shopping list
         else:
@@ -571,21 +569,22 @@ class ShoppingList():
         # case: there exists a shopping list
         if self.__shopping_list:
 
-            top_border = "*" * 77
-            partial_border = "*" * 31
+            top_border = "*" * 100
+            title = " SHOPPING LIST  "
+            partial_border = "*" * ((100 - len(title)) // 2)
             print(top_border)
-            print(partial_border, "Shopping List", partial_border)
+            print(partial_border + title + partial_border)
             print(top_border + "\n")
 
-            print("{:30s} {:30s} {:15s}\n".format("Item", "Aisle", "Est. Price"))
+            print("{:40s} {:40s} {:18s}\n".format("Item", "Aisle", "Est. Price"))
 
             for ingredient, data in sorted(self.__shopping_list.items(), key=lambda item: item[1]):
 
                 aisle = data[0]
                 price = data[1]
-                print("{:30.30s} {:30.30s} {:15.2f}".format(ingredient, aisle, price))
+                print("{:40.40s} {:40.40s} {:18.2f}".format(ingredient, aisle, price))
             
-            print("\n{:45s} {:15s} {:15.2f}".format("", "Est. Total", self.__total))
+            print("\n{:65s} {:15s} {:18.2f}".format("", "Est. Total", self.__total))
         
         # case: there does not exist a shopping list
         else:
