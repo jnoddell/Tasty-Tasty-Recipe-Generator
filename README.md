@@ -89,6 +89,7 @@ This file simply provides universally used command line interface (CLI) function
 
 ```
 Tasty, Tasty Recipe Generator/
+|-- .gitignore
 |-- readme.md
 |-- requirements.txt
 |-- src/
